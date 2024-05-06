@@ -1,5 +1,4 @@
-import { Fragment } from "react";
-import { useState } from "react"
+import { Fragment, useState } from "react";
 import CourseList from "./components/CourseList";
 import CreditCalculation from "./components/CreditCalculatio";
 import Footer from "./components/Footer";
@@ -19,15 +18,52 @@ export default function App() {
   const data = getAllCourseData()
   const [courses, setCourses] = useState(data)
   const [selectCourse, setSelectCourse] = useState([])
+  const [remainingCredit,setRemainingCredit]=useState(20)
+  const [totalCreditHours,setTotalCreditHours]=useState()
+  const [totalCreditPrice,setTotalCreditPrice]=useState(0)
 
   function handleSelectCourse(newCourse) {
-    console.log(newCourse.credit,newCourse.price,"add")
+    
+
+    let creditHours=newCourse.credit 
+    let totalPrice=newCourse.price
+    const findCourse=selectCourse.find((item)=>item.id===newCourse.id)
+    if(findCourse){
+      return alert("This course is already included!")
+    }
+
+    selectCourse.forEach((item)=>{
+      creditHours=creditHours+item.credit
+    })
+    if(creditHours>20){
+      return alert("You dont't have enough credit!")
+    }
+    const remainingCreditHour=20-creditHours
+    setRemainingCredit(remainingCreditHour)
+    setTotalCreditHours(creditHours)
+
+    selectCourse.forEach((item)=>{
+      totalPrice=totalPrice+item.price
+    })
+    setTotalCreditPrice(totalPrice)
+    
+
+    
+
+
     setSelectCourse([
       ...selectCourse,
       newCourse
     ])
   }
   console.log(selectCourse)
+
+  /* 
+  totalCreditPrice
+  totalCreditHours
+  remainingCredit
+  selectedCourse
+  */
 
 
   return (
@@ -42,7 +78,11 @@ export default function App() {
             <CourseList
               onSelectCourse={handleSelectCourse}
               courses={courses} />
-            <CreditCalculation selectedCourses={selectCourse} />
+            <CreditCalculation
+            totalCreditPrice={totalCreditPrice}
+            totalCreditHours={totalCreditHours}
+            remainingCredit={remainingCredit} 
+            selectedCourses={selectCourse} />
           </div>
         </main>
 

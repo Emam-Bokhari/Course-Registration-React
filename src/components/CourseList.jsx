@@ -1,5 +1,5 @@
 import { Fragment } from "react"
-import { getImageUrl } from "../utility/courseImage"
+// import { getImageUrl } from "../utility/courseImage"
 
 export default function CourseList({ courses,onSelectCourse }) {
     return (
